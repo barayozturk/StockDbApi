@@ -1,0 +1,6 @@
+@SntYazılımApp_HostAddress = http://localhost:5117
+
+GET {{SntYazılımApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

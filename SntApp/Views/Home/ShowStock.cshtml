@@ -1,0 +1,109 @@
+﻿
+@model SntApp.Models.StockData
+@{
+    ViewData["Title"] = "Stock Chart";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Stock Data - Close Values</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="stockChart" width="800" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- İkinci Container başlangıcı -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Bar Chart - Close Values</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="barChart" width="800" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- İkinci Container bitişi -->
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Line Chart
+        var labels = [
+        @foreach (var timeSeries in Model.TimeSeries)
+        {
+            <text>"@timeSeries.Key", </text>
+        }
+                ];
+
+        var closeValues = [
+        @foreach (var timeSeries in Model.TimeSeries)
+        {
+            <text>@timeSeries.Value.Close, </text>
+        }
+                ];
+
+        var ctx = document.getElementById('stockChart').getContext('2d');
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: 'Close Values',
+                data: closeValues,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: false
+            }]
+        };
+
+        var config = {
+            type: 'line',
+            data: data,
+        };
+
+        var myChart = new Chart(ctx, config);
+
+        // Bar Chart
+        var barLabels = [
+        @foreach (var timeSeries in Model.TimeSeries)
+        {
+            <text>"@timeSeries.Key", </text>
+        }
+                ];
+
+        var barCloseValues = [
+        @foreach (var timeSeries in Model.TimeSeries)
+        {
+            <text>@timeSeries.Value.Close, </text>
+        }
+                ];
+
+        var barCtx = document.getElementById('barChart').getContext('2d');
+        var barData = {
+            labels: barLabels,
+            datasets: [{
+                label: 'Close Values',
+                data: barCloseValues,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        var barConfig = {
+            type: 'bar',
+            data: barData,
+        };
+
+        var myBarChart = new Chart(barCtx, barConfig);
+    </script>
+}
